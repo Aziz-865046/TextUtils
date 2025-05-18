@@ -4,6 +4,8 @@ import Alert from "./components/Alert";
 import Navbar from "./components/Navbar";
 import TextForm from "./components/TextForm";
 import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import NoMatch from "./components/NoMatch";
 
 function App() {
   const [mode, setMode] = useState("light"); // whether dark mode is enabled or not
@@ -11,8 +13,8 @@ function App() {
   const showAlert = (message, type) => {
     setAlert({
       msg: message,
-      type: type
-    })
+      type: type,
+    });
     setTimeout(() => {
       setAlert(null);
     }, 1500);
@@ -37,10 +39,28 @@ function App() {
         toggleMode={toggleMode}
       />
       <Alert alert={alert} />
-      <div className="container my-3">
-        <TextForm heading="Enter the text to analyze" mode={mode} showAlert={showAlert} />
-        {/* <About /> */}
-      </div>
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <TextForm
+              heading="Enter the text to analyze"
+              mode={mode}
+              showAlert={showAlert}
+            />
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <div className="container my-3">
+              <About mode={mode} />
+            </div>
+          }
+        />
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
     </>
   );
 }
